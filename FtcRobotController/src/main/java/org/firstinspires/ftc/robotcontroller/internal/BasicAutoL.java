@@ -46,6 +46,7 @@ public class BasicAutoL extends LinearOpMode {
       NORTHWEST(0, 1, -1 , 0);
       
       public final int brVal, blVal, frVal, flVal;
+		
       travelDir(br, bl, fr, fl) {
         this.brVal = br;
         this.blVal = bl;
@@ -59,11 +60,10 @@ public class BasicAutoL extends LinearOpMode {
         waitForStart();
 
         // Retrieve motor ports
-        backLeftMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
-        backRightMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
-        frontLeftMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
-        frontRightMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
-        collectorMotor = hardwareMap.dcMotor.get("cl");
+        backLeftMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
+        backRightMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
+        frontLeftMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
+        frontRightMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
 
         //backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         //backRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -100,272 +100,119 @@ public class BasicAutoL extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // North East
-        // Goes diagnally straight towards beacon
-        blEncoderPosition -= ticksPerInch * (48 * Math.sqrt(2) * (48.0/37.0) + 1.5); // The 48/37 is the result of a change in inches per tick because of omniwheel drive train structure
-        frEncoderPosition += ticksPerInch * (48 * Math.sqrt(2) * (48.0/37.0) + 1.5); // -5 is for error
-
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-
-        backLeftMotor.setPower(-0.175);
-        frontRightMotor.setPower(0.175);
-
-        while (backLeftMotor.isBusy() || frontRightMotor.isBusy()){
-        }
-
-        // West
-        // Just hit button and is backing away an inch
-        flEncoderPosition -= ticksPerInch * 3;
-        blEncoderPosition += ticksPerInch * 3;
-        frEncoderPosition -= ticksPerInch * 3;
-        brEncoderPosition += ticksPerInch * 3;
-
-        frontLeftMotor.setTargetPosition(flEncoderPosition);
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-        backRightMotor.setTargetPosition(brEncoderPosition);
-
-        frontLeftMotor.setPower(-0.2);
-        backLeftMotor.setPower(0.2);
-        frontRightMotor.setPower(-0.2);
-        backRightMotor.setPower(0.2);
-
-        while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-        }
-
-        if (colorSensor.blue() < colorSensor.red()) {
-            sleep(4500);
-
-            // East
-            // Goes towards button to hit it
-            flEncoderPosition += ticksPerInch * 3;
-            blEncoderPosition -= ticksPerInch * 3;
-            frEncoderPosition += ticksPerInch * 3;
-            brEncoderPosition -= ticksPerInch * 3;
-
-            frontLeftMotor.setTargetPosition(flEncoderPosition);
-            backLeftMotor.setTargetPosition(blEncoderPosition);
-            frontRightMotor.setTargetPosition(frEncoderPosition);
-            backRightMotor.setTargetPosition(brEncoderPosition);
-
-            frontLeftMotor.setPower(0.1);
-            backLeftMotor.setPower(-0.1);
-            frontRightMotor.setPower(0.1);
-            backRightMotor.setPower(-0.1);
-
-            while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-            }
-
-            // West
-            // Just hit button and is backing away an inch
-            flEncoderPosition -= ticksPerInch * 3;
-            blEncoderPosition += ticksPerInch * 3;
-            frEncoderPosition -= ticksPerInch * 3;
-            brEncoderPosition += ticksPerInch * 3;
-
-            frontLeftMotor.setTargetPosition(flEncoderPosition);
-            backLeftMotor.setTargetPosition(blEncoderPosition);
-            frontRightMotor.setTargetPosition(frEncoderPosition);
-            backRightMotor.setTargetPosition(brEncoderPosition);
-
-            frontLeftMotor.setPower(-0.2);
-            backLeftMotor.setPower(0.2);
-            frontRightMotor.setPower(-0.2);
-            backRightMotor.setPower(0.2);
-
-            while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-            }
-        }
-
-        // North
-        // Moves forward 48 inches to hit the next beacon
-        flEncoderPosition -= ticksPerInch * 45;
-        blEncoderPosition -= ticksPerInch * 45;
-        frEncoderPosition += ticksPerInch * 45;
-        brEncoderPosition += ticksPerInch * 45;
-
-        frontLeftMotor.setTargetPosition(flEncoderPosition);
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-        backRightMotor.setTargetPosition(brEncoderPosition);
-
-        frontLeftMotor.setPower(-0.15);
-        backLeftMotor.setPower(-0.15);
-        frontRightMotor.setPower(0.15);
-        backRightMotor.setPower(0.15);
-
-        while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-        }
-
-        /*55
-        // Goes towards button to get closer
-        flEncoderPosition += ticksPerInch * 4;
-        blEncoderPosition -= ticksPerInch * 4;
-        frEncoderPosition += ticksPerInch * 4;
-        brEncoderPosition -= ticksPerInch * 4;
-
-        frontLeftMotor.setTargetPosition(flEncoderPosition);
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-        backRightMotor.setTargetPosition(brEncoderPosition);
-
-        frontLeftMotor.setPower(0.1);
-        backLeftMotor.setPower(-0.1);
-        frontRightMotor.setPower(0.1);
-        backRightMotor.setPower(-0.1);
-
-        while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-        }*/
-
-        //
-        // Hitting beacon 2
-        //
-
-        if (colorSensor.blue() > colorSensor.red()) {
-            // East
-            // Goes towards button to hit it
-            flEncoderPosition += ticksPerInch * 3;
-            blEncoderPosition -= ticksPerInch * 3;
-            frEncoderPosition += ticksPerInch * 3;
-            brEncoderPosition -= ticksPerInch * 3;
-
-            frontLeftMotor.setTargetPosition(flEncoderPosition);
-            backLeftMotor.setTargetPosition(blEncoderPosition);
-            frontRightMotor.setTargetPosition(frEncoderPosition);
-            backRightMotor.setTargetPosition(brEncoderPosition);
-
-            frontLeftMotor.setPower(0.1);
-            backLeftMotor.setPower(-0.1);
-            frontRightMotor.setPower(0.1);
-            backRightMotor.setPower(-0.1);
-
-            while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-            }
-
-            // Increase position to offset for not having to hit the second button
-            flEncoderPosition -= ticksPerInch * 7.5;
-            blEncoderPosition -= ticksPerInch * 7.5;
-            frEncoderPosition += ticksPerInch * 7.5;
-            brEncoderPosition += ticksPerInch * 7.5;
-        } else {
-            // North
-            // Moves forward 5.5 inches to hit the next button
-            flEncoderPosition -= ticksPerInch * 7.5;
-            blEncoderPosition -= ticksPerInch * 7.5;
-            frEncoderPosition += ticksPerInch * 7.5;
-            brEncoderPosition += ticksPerInch * 7.5;
-
-            frontLeftMotor.setTargetPosition(flEncoderPosition);
-            backLeftMotor.setTargetPosition(blEncoderPosition);
-            frontRightMotor.setTargetPosition(frEncoderPosition);
-            backRightMotor.setTargetPosition(brEncoderPosition);
-
-            frontLeftMotor.setPower(-0.15);
-            backLeftMotor.setPower(-0.15);
-            frontRightMotor.setPower(0.15);
-            backRightMotor.setPower(0.15);
-
-            while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-            }
-            
-            // East
-            // Goes towards button to hit it
-            flEncoderPosition += ticksPerInch * 3;
-            blEncoderPosition -= ticksPerInch * 3;
-            frEncoderPosition += ticksPerInch * 3;
-            brEncoderPosition -= ticksPerInch * 3;
-
-            frontLeftMotor.setTargetPosition(flEncoderPosition);
-            backLeftMotor.setTargetPosition(blEncoderPosition);
-            frontRightMotor.setTargetPosition(frEncoderPosition);
-            backRightMotor.setTargetPosition(brEncoderPosition);
-
-            frontLeftMotor.setPower(0.1);
-            backLeftMotor.setPower(-0.1);
-            frontRightMotor.setPower(0.1);
-            backRightMotor.setPower(-0.1);
-
-            while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-            }
-        }
-
-        // West
-        // Just hit button and is backing away to charge corner
-        flEncoderPosition -= ticksPerInch * 8;
-        blEncoderPosition += ticksPerInch * 8;
-        frEncoderPosition -= ticksPerInch * 8;
-        brEncoderPosition += ticksPerInch * 8;
-
-        frontLeftMotor.setTargetPosition(flEncoderPosition);
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-        backRightMotor.setTargetPosition(brEncoderPosition);
-
-        frontLeftMotor.setPower(-0.15);
-        backLeftMotor.setPower(0.15);
-        frontRightMotor.setPower(-0.15);
-        backRightMotor.setPower(0.15);
-
-        while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-        }
-
-        // North
-        // Rushes toward center vortex
-        flEncoderPosition -= ticksPerInch * 6;
-        blEncoderPosition -= ticksPerInch * 6;
-        frEncoderPosition += ticksPerInch * 6;
-        brEncoderPosition += ticksPerInch * 6;
-
-        frontLeftMotor.setTargetPosition(flEncoderPosition);
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-        backRightMotor.setTargetPosition(brEncoderPosition);
-
-        frontLeftMotor.setPower(-1);
-        backLeftMotor.setPower(-1);
-        frontRightMotor.setPower(1);
-        backRightMotor.setPower(1);
-
-        while (frontLeftMotor.isBusy() && backLeftMotor.isBusy() && frontRightMotor.isBusy() && backRightMotor.isBusy()){
-        }
-
-        // South West
-        blEncoderPosition += ticksPerInch * (72 * Math.sqrt(2) * (48.0/37.0) - 0); // The 48/37 is the result of a change in inches per tick because of omniwheel drive train structure
-        frEncoderPosition -= ticksPerInch * (72 * Math.sqrt(2) * (48.0/37.0) - 0); // -5 is for error
-
-        backLeftMotor.setTargetPosition(blEncoderPosition);
-        frontRightMotor.setTargetPosition(frEncoderPosition);
-
-        backLeftMotor.setPower(1.0);
-        frontRightMotor.setPower(-1.0);
-
-        while (backLeftMotor.isBusy() || frontRightMotor.isBusy()){
-        }
+        startWhiteLineTravel();
 
         stop();
     }
+	
+	private void startWhiteLineTravel() {
+		// North East
+        // Goes diagnally straight towards beacon until it finds the white line
+        blEncoderPosition -= ticksPerInch * 200; // 200 is arbitrary doesn't matter
+        frEncoderPosition += ticksPerInch * 200;
+
+        backLeftMotor.setTargetPosition(blEncoderPosition);
+        frontRightMotor.setTargetPosition(frEncoderPosition);
+
+        backLeftMotor.setPower(-0.2);
+        frontRightMotor.setPower(0.2);
+		
+		double currentColor = (whiteLineFinder.blue() + whiteLineFinder.red() + whiteLineFinder.green()) / 3.0;
+		double lastColor = (whiteLineFinder.blue() + whiteLineFinder.red() + whiteLineFinder.green()) / 3.0;
+
+        while (Math.abs(currentColor - lastColor) < 3) {
+			lastColor = currentColor;
+			currentColor = (whiteLineFinder.blue() + whiteLineFinder.red() + whiteLineFinder.green()) / 3.0;
+        }
+		
+		backLeftMotor.setPower(0);
+		frontRightMotor.setPower(0);
+		
+		blEncoderPosition = backLeftMotor.currentPosition(); // Not sure if currentPosition is the right method name for finding current encoder value
+		frEncoderPosition = frontLeftMotor.currentPosition(); 
+	}
     
     private void sinusoidalTravel(int dDistance, double maxSpeed, travelDir dir) {
-      int brInitPos = brEncoderPosition;
-      int blInitPos = blEncoderPosition;
-      int frInitPos = frEncoderPosition;
-      int flInitPos = flEncoderPosition;
+		maxSpeed -= 0.1;
+		
+      	final int brInitPos = brEncoderPosition;
+      	final int blInitPos = blEncoderPosition;
+      	final int frInitPos = frEncoderPosition;
+      	final int flInitPos = flEncoderPosition;
       
-      brEncoderPosition += dir.brVal * dDistance;
-      blEncoderPosition += dir.blVal * dDistance;
-      frEncoderPosition += dir.frVal * dDistance;
-      flEncoderPosition += dir.flVal * dDistance;
+      	brEncoderPosition += dir.brVal * dDistance;
+      	blEncoderPosition += dir.blVal * dDistance;
+      	frEncoderPosition += dir.frVal * dDistance;
+      	flEncoderPosition += dir.flVal * dDistance;
+		
+		backRightMotor.setPosition(brEncoderPosition);
+		backLeftMotor.setPosition(blEncoderPosition);
+		frontRightMotor.setPosition(frEncoderPosition);
+		frontLeftMotor.setPosition(flEncoderPosition);
       
-      do {
-        // (:
+      	do {
+        	// (:
         
-        double brCurrentSpeed = maxSpeed * Math.sin(Math.PI * (brEncoderPosition - brInitPos) / (double) dDistance)
-      } while(backRightMotor.isBusy() ||
-              backLeftMotor.isBusy() ||
-              frontRightMotor.isbusy() ||
-              frontLeftMotor.isBusy());
+        	double brCurrentSpeed = maxSpeed * Math.sin(Math.PI * ((double) (brEncoderPosition - brInitPos) / (double) dDistance + 0.1));
+        	double blCurrentSpeed = maxSpeed * Math.sin(Math.PI * ((double) (blEncoderPosition - blInitPos) / (double) dDistance + 0.1));
+        	double bfCurrentSpeed = maxSpeed * Math.sin(Math.PI * ((double) (frEncoderPosition - frInitPos) / (double) dDistance + 0.1));
+        	double flCurrentSpeed = maxSpeed * Math.sin(Math.PI * ((double) (flEncoderPosition - flInitPos) / (double) dDistance + 0.1));
+			
+			backRightMotor.setPower(brCurrentSpeed);
+			backLeftMotor.setPower(blCurrentSpeed);
+			frontRightMotor.setPower(frCurrentSpeed);
+			frontLeftMotor.setPower(flCurrentSpeed);
+			
+      	} while(backRightMotor.isBusy() ||
+              	backLeftMotor.isBusy() ||
+              	frontRightMotor.isbusy() ||
+              	frontLeftMotor.isBusy());
     }
+	
+	private void linearTravel(int dDistance, double speed, travelDir dir) {
+		maxSpeed -= 0.1;
+		
+      	final int brInitPos = brEncoderPosition;
+      	final int blInitPos = blEncoderPosition;
+      	final int frInitPos = frEncoderPosition;
+      	final int flInitPos = flEncoderPosition;
+      
+      	brEncoderPosition += dir.brVal * dDistance;
+      	blEncoderPosition += dir.blVal * dDistance;
+      	frEncoderPosition += dir.frVal * dDistance;
+      	flEncoderPosition += dir.flVal * dDistance;
+		
+		backRightMotor.setPosition(brEncoderPosition);
+		backLeftMotor.setPosition(blEncoderPosition);
+		frontRightMotor.setPosition(frEncoderPosition);
+		frontLeftMotor.setPosition(flEncoderPosition);
+		
+		backRightMotor.setPower(speed);
+		backLeftMotor.setPower(speed);
+		frontRightMotor.setPower(speed);
+		frontLeftMotor.setPower(speed);
+      
+      	do {
+        	// (:		
+      	} while(backRightMotor.isBusy() ||
+              	backLeftMotor.isBusy() ||
+              	frontRightMotor.isbusy() ||
+              	frontLeftMotor.isBusy());
+	}
+	
+	private void checkOrHitButton1() {
+		while (colorSensor1.blue() > colorSensor1.red() && colorSensor2.blue() > colorSensor2.red()) {
+			linearTravel(3, 0.25, travelDir.EAST);
+			linearTravel(3, 0.25, travelDir.WEST);
+		}
+	}
+	
+	private void checkOrHitButton2() { 
+		while (colorSensor3.blue() > colorSensor3.red() && colorSensor2.blue() > colorSensor2.red()) {
+			linearTravel(3, 0.25, travelDir.EAST);
+			linearTravel(3, 0.25, travelDir.WEST);
+		}
+	}
 
     private void addAndUpdateData(String caption, Object value) {
         telemetry.addData(caption, value);
