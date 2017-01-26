@@ -4,13 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 
 /**
  * Created by Miguel Padilla on 11/12/16.
  */
 
-@Autonomous(name="BasicAutoRed", group="AutoOp")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name="BasicAutoBlue", group="AutoOp")
+public class BasicAutoL extends LinearOpMode {
 
     // Robot dimmensions
     private final static double ticksPerInch = 2000.0/28.625; // ticks per inch
@@ -31,6 +35,14 @@ public class BasicAuto extends LinearOpMode {
     private ColorSensor colorSensor2;
     private ColorSensor colorSensor3;
     private ColorSensor whiteLineFinder;
+
+    // Setup for range sensor because it's stupid and I hate it......
+    byte[] range1Cache;
+    I2cAddr RANGE1ADDRESS = new I2cAddr(0x14);
+    public static final int RANGE1_REG_START = 0x04;
+    public static final int RANGE1_READ_LENGTH = 2;
+    public I2cDevice RANGE1;
+    public I2cDeviceSynch RANGE1Reader;
 
     private enum travelDir {
         NORTH(1, -1, 1, -1),
@@ -57,20 +69,25 @@ public class BasicAuto extends LinearOpMode {
         waitForStart();
 
         // Retrieve motor ports
-        backLeftMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
-        backRightMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
-        frontLeftMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
-        frontRightMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
+        backLeftMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
+        backRightMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
+        frontLeftMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
+        frontRightMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
 
         // Retrieve sensor ports
-        colorSensor1 = hardwareMap.colorSensor.get("cs3");
+        colorSensor1 = hardwareMap.colorSensor.get("cs1");
         colorSensor1.enableLed(false);
         colorSensor2 = hardwareMap.colorSensor.get("cs2");
         colorSensor2.enableLed(false);
-        colorSensor3 = hardwareMap.colorSensor.get("cs1");
+        colorSensor3 = hardwareMap.colorSensor.get("cs3");
         colorSensor3.enableLed(false);
         whiteLineFinder = hardwareMap.colorSensor.get("wlf");
         whiteLineFinder.enableLed(true);
+
+        // Initialzing range sensor stuff
+        RANGE1 = hardwareMap.i2cDevice.get("range");
+        RANGE1Reader = new I2cDeviceSynchImpl(RANGE1, RANGE1ADDRESS, false);
+        RANGE1Reader.engage();
 
         // Resets encoders, but this cuts power to the motors
         backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
