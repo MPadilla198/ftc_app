@@ -90,43 +90,45 @@ public class BasicAutoL extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		
-		////////////////////////////////
-		// Start Program
-		////////////////////////////////
+	////////////////////////////////
+	// Start Program
+	////////////////////////////////
         startWhiteLineTravel();
 		
-		// Some way to travel to the wall and stop before it hits; slightly less than 3 inches away
+	// Some way to travel to the wall and stop before it hits; slightly less than 3 inches away
+	
 		
+	linearTravel(ticksPerInch * 2.5, 0.2, travelDir.NORTH);
 		
+	// Checks colors and hits blue button
+	if (colorSensor2.blue() > colorSensor2.red() && colorSensor1.blue() > colorSensor1.red()) {
+		hitAndCheckButton1();
+		linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
+	} else {
+		linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
+		hitAndCheckButton2();
+	}
 		
-		// Checks colors and hits blue button
-		if (colorSensor2.blue() > colorSensor2.red() && colorSensor1.blue() > colorSensor1.red()) {
-			hitAndCheckButton1();
-			linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
-		} else {
-			linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
-			hit AndCheckButton2();
-		}
+	// travels close to the beacon then uses the color sensor to get it perfectly on the white line and lined up with the button
+	sinusoidalTravel(ticksPerInches * 42, 1.0, travelDir.SOUTH);
+	secondWhiteLineTravel();
+	linearTravel(ticksPerInch * 2.5, 0.2, travelDir.NORTH);
 		
-		// travels close to the beacon then uses the color sensor to get it perfectly on the white line and lined up with the button
-		sinusoidalTravel(ticksPerInches * 42, 1.0, travelDir.SOUTH);
-		secondWhiteLineTravel();
+	if (colorSensor2.blue() > colorSensor2.red() && colorSensor1.blue() > colorSensor1.red()) {
+		hitAndCheckButton1();
+		linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
+	} else {
+		linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
+		hitAndCheckButton2();
+	}
 		
-		if (colorSensor2.blue() > colorSensor2.red() && colorSensor1.blue() > colorSensor1.red()) {
-			hitAndCheckButton1();
-			linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
-		} else {
-			linearTravel(ticksPerInch * 5.5, 0.2, travelDir.SOUTH);
-			hit AndCheckButton2();
-		}
-		
-		linearTravel(ticksPerInch * 72 * Math.sqrt(2), 1.0, travelDir.NORTHWEST);
+	linearTravel(ticksPerInch * 72 * Math.sqrt(2), 1.0, travelDir.NORTHWEST);
 		
         stop();
     }
 	
 	private void startWhiteLineTravel() {
-		// North East
+	// North East
         // Goes diagnally straight towards beacon until it finds the white line
         blEncoderPosition -= ticksPerInch * 200; // 200 is arbitrary doesn't matter
         frEncoderPosition += ticksPerInch * 200;
