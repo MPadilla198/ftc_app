@@ -12,7 +12,7 @@ public class RangeTester extends SynchronousOpMode {
     public void main() throws InterruptedException {
         I2cDevice range;
         range = hardwareMap.i2cDevice.get("range");
-        I2cDeviceReader rangeReader = new I2cDeviceReader(range, 0x28, 0x04, 2);
+        I2cDeviceReader rangeReader = new I2cDeviceReader(range, 0x14, 0x04, 2);
  
         telemetry.addData("readerLength", rangeReader.getReadBuffer().length);
         telemetry.update();
