@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Miguel Padilla on 11/12/16.
  */
 
-@Autonomous(name="BasicAutoBlue", group="AutoOp")
-public class BasicAutoL extends LinearOpMode {
+@Autonomous(name="BasicAutoRed", group="AutoOp")
+public class BasicAuto extends LinearOpMode {
 
     // Robot dimmensions
     private final static double ticksPerInch = 2000.0/28.625; // ticks per inch
@@ -57,17 +57,17 @@ public class BasicAutoL extends LinearOpMode {
         waitForStart();
 
         // Retrieve motor ports
-        backLeftMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
-        backRightMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
-        frontLeftMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
-        frontRightMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
+        backLeftMotor = hardwareMap.dcMotor.get("fl"); // 1.0 == clock-wise
+        backRightMotor = hardwareMap.dcMotor.get("fr"); // 1.0 == clock-wise
+        frontLeftMotor = hardwareMap.dcMotor.get("bl"); // 1.0 == clock-wise
+        frontRightMotor = hardwareMap.dcMotor.get("br"); // 1.0 == clock-wise
 
         // Retrieve sensor ports
-        colorSensor1 = hardwareMap.colorSensor.get("cs1");
+        colorSensor1 = hardwareMap.colorSensor.get("cs3");
         colorSensor1.enableLed(false);
         colorSensor2 = hardwareMap.colorSensor.get("cs2");
         colorSensor2.enableLed(false);
-        colorSensor3 = hardwareMap.colorSensor.get("cs3");
+        colorSensor3 = hardwareMap.colorSensor.get("cs1");
         colorSensor3.enableLed(false);
         whiteLineFinder = hardwareMap.colorSensor.get("wlf");
         whiteLineFinder.enableLed(true);
