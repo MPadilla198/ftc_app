@@ -39,10 +39,10 @@ public class BasicAutoL extends LinearOpMode {
     // Setup for range sensor because it's stupid and I hate it......
     byte[] range1Cache;
     I2cAddr RANGE1ADDRESS = new I2cAddr(0x14);
-    public static final int RANGE1_REG_START = 0x04;
-    public static final int RANGE1_READ_LENGTH = 2;
-    public I2cDevice RANGE1;
-    public I2cDeviceSynch RANGE1Reader;
+    private static final int RANGE1_REG_START = 0x04;
+    private static final int RANGE1_READ_LENGTH = 2;
+    private I2cDevice RANGE1;
+    private I2cDeviceSynch RANGE1Reader;
 
     private enum travelDir {
         NORTH(1, -1, 1, -1),
@@ -112,9 +112,9 @@ public class BasicAutoL extends LinearOpMode {
         startWhiteLineTravel();
 
         // Some way to travel to the wall and stop before it hits; slightly less than 3 inches away
+        travelToWall();
 
-
-        linearTravel((int) (ticksPerInch * 2.5), 0.2, travelDir.NORTH);
+        linearTravel((int) (ticksPerInch * 1.5), 0.2, travelDir.NORTH);
 
         // Checks colors and hits blue button
         if (colorSensor2.blue() > colorSensor2.red() && colorSensor1.blue() > colorSensor1.red()) {
@@ -168,6 +168,41 @@ public class BasicAutoL extends LinearOpMode {
 
         blEncoderPosition = backLeftMotor.getCurrentPosition(); // Not sure if currentPosition is the right method name for finding current encoder value
         frEncoderPosition = frontLeftMotor.getCurrentPosition();
+    }
+    
+    private void travelToWall() {
+        final double speed = 0.2;
+        final travelDir dir = travelDir.EAST;
+        final int dDistance = (int)(ticksPerInch * 100); // Arbitrary
+
+        brEncoderPosition += dir.brVal * dDistance;
+        blEncoderPosition += dir.blVal * dDistance;
+        frEncoderPosition += dir.frVal * dDistance;
+        flEncoderPosition += dir.flVal * dDistance;
+
+        backRightMotor.setTargetPosition(brEncoderPosition);
+        backLeftMotor.setTargetPosition(blEncoderPosition);
+        frontRightMotor.setTargetPosition(frEncoderPosition);
+        frontLeftMotor.setTargetPosition(flEncoderPosition);
+
+        backRightMotor.setPower(speed);
+        backLeftMotor.setPower(speed);
+        frontRightMotor.setPower(speed);
+        frontLeftMotor.setPower(speed);
+        
+        while (RANGE1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH)[0] > 15) {
+            // (:
+        }
+
+        backRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+
+        brEncoderPosition = backRightMotor.getCurrentPosition();
+        blEncoderPosition = backLeftMotor.getCurrentPosition();
+        frEncoderPosition = frontRightMotor.getCurrentPosition();
+        flEncoderPosition = frontLeftMotor.getCurrentPosition();
     }
 
     private void secondWhiteLineTravel() {
